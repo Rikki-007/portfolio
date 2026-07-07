@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-07-07T15:11:24.876Z",
+  "projectRoot": "C:\\GIT\\portfolio",
+  "structure": {
+    "hasPackageJson": true,
+    "hasTsConfig": true,
+    "hasClaudeConfig": true,
+    "hasClaudeFlow": true
+  },
+  "scannedAt": 1783437084877
+}

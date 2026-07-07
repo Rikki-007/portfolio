@@ -5,36 +5,31 @@ export function EagleMark({ size = 28, className = "" }: IconProps) {
     <svg
       width={size}
       height={size}
-      viewBox="0 0 136 110"
+      viewBox="0 0 190 145"
       fill="none"
       className={className}
       aria-hidden="true"
     >
-      {/* body/tail rendered as a "Z" so the letterform doubles as the bird's silhouette */}
+      {/* crest tuft flicking off the back of the head */}
       <path
-        d="M55 50 L110 50 L55 100 L110 100"
+        d="M104 22 Q86 4 64 16"
         stroke="currentColor"
-        strokeWidth={7}
+        strokeWidth={5}
+        strokeLinecap="round"
+      />
+      {/* head + hooked beak */}
+      <path d="M106 26 L172 48 L142 68 L108 52 Z" fill="currentColor" />
+      {/* wing (S) flowing into tail/foot (Z) as one continuous stroke */}
+      <path
+        d="M104 56 Q40 34 18 26 Q8 34 20 40 Q60 54 46 66 Q20 78 30 92 L104 92 L40 134 L118 134 Q132 132 128 118"
+        stroke="currentColor"
+        strokeWidth={9}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* head + beak */}
-      <path d="M110 50 L128 36 L114 58 Z" fill="currentColor" />
-      {/* wing, fanned from the shoulder */}
+      {/* feather notch across the S */}
       <path
-        d="M55 50 Q26 16 4 22"
-        stroke="currentColor"
-        strokeWidth={4}
-        strokeLinecap="round"
-      />
-      <path
-        d="M58 58 Q30 36 8 44"
-        stroke="currentColor"
-        strokeWidth={4}
-        strokeLinecap="round"
-      />
-      <path
-        d="M61 66 Q36 56 16 64"
+        d="M26 58 L54 54"
         stroke="currentColor"
         strokeWidth={4}
         strokeLinecap="round"
