@@ -1,101 +1,132 @@
 "use client";
 
-import { motion } from "framer-motion";
-
-const container = {
-  hidden: {},
-  show: {
-    transition: { staggerChildren: 0.08, delayChildren: 0.2 },
-  },
-};
-
-const line = {
-  hidden: { y: "110%" },
-  show: {
-    y: "0%",
-    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] as const },
-  },
-};
-
-function AnimatedLine({
-  text,
-  className,
-  outline = false,
-}: {
-  text: string;
-  className?: string;
-  outline?: boolean;
-}) {
-  return (
-    <span className="block overflow-hidden">
-      <motion.span
-        variants={line}
-        className={`block ${outline ? "text-outline" : ""} ${className ?? ""}`}
-      >
-        {text}
-      </motion.span>
-    </span>
-  );
-}
+import { useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "framer-motion";
+import { fadeUp, staggerContainer, cinematicEase } from "@/lib/motion";
 
 export default function Hero() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const designX = useSpring(useTransform(mouseX, [-1, 1], [-24, 24]), {
+    stiffness: 60,
+    damping: 20,
+  });
+  const designY = useSpring(useTransform(mouseY, [-1, 1], [-14, 14]), {
+    stiffness: 60,
+    damping: 20,
+  });
+  const engineerX = useSpring(useTransform(mouseX, [-1, 1], [24, -24]), {
+    stiffness: 60,
+    damping: 20,
+  });
+  const engineerY = useSpring(useTransform(mouseY, [-1, 1], [14, -14]), {
+    stiffness: 60,
+    damping: 20,
+  });
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    mouseX.set(((e.clientX - rect.left) / rect.width) * 2 - 1);
+    mouseY.set(((e.clientY - rect.top) / rect.height) * 2 - 1);
+  };
+
   return (
     <section
       id="top"
-      className="section-anchor relative flex min-h-screen flex-col justify-center overflow-hidden px-6 pt-28 pb-16"
+      ref={sectionRef}
+      onMouseMove={handleMouseMove}
+      className="section-anchor relative flex h-screen items-center justify-center overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute -top-40 left-1/4 h-[420px] w-[420px] rounded-full bg-red/25 blur-[140px]" />
-        <div className="absolute bottom-0 right-1/4 h-[380px] w-[380px] rounded-full bg-yellow/15 blur-[140px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,var(--navy-deep)_0%,var(--ink)_75%)]" />
-      </div>
-
-      <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.1 }}
-        className="mb-6 font-display text-sm uppercase tracking-[0.35em] text-muted"
-      >
-        Portfolio — 2026 / Based in India
-      </motion.p>
-
       <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="font-display font-bold uppercase leading-[0.9] tracking-tight text-paper"
+        style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
+        className="relative flex w-full max-w-6xl flex-col items-center px-6 [transform:translateZ(0)]"
       >
-        <div className="text-[16vw] md:text-[9vw]">
-          <AnimatedLine text="Priyanshu" />
-        </div>
-        <div className="text-[16vw] md:text-[9vw]">
-          <AnimatedLine text="Malik" className="text-red" />
-        </div>
-        <div className="mt-2 text-[10vw] md:text-[5.5vw]">
-          <AnimatedLine text="Engineer / Designer" outline />
-        </div>
+        <motion.div
+          variants={staggerContainer(0.15, 0.1)}
+          initial="hidden"
+          animate="show"
+          className="flex flex-col items-center gap-3 text-center"
+        >
+          <motion.span
+            variants={fadeUp}
+            className="font-mono text-xs uppercase tracking-[0.4em] text-fog"
+          >
+            Portfolio — 2026 Edition
+          </motion.span>
+
+          <div className="relative flex flex-col items-center leading-none">
+            <motion.h1
+              variants={fadeUp}
+              style={{ x: designX, y: designY }}
+              className="font-display text-[15vw] text-glow-crimson text-crimson sm:text-[10vw]"
+            >
+              DESIGN
+            </motion.h1>
+            <motion.h1
+              variants={fadeUp}
+              style={{ x: engineerX, y: engineerY }}
+              className="font-display -mt-[3vw] text-[15vw] text-glow-cyan text-cyan sm:-mt-[2vw] sm:text-[10vw]"
+            >
+              ENGINEER
+            </motion.h1>
+          </div>
+
+          <motion.p
+            variants={fadeUp}
+            className="max-w-xl text-balance font-sans text-sm text-fog sm:text-base"
+          >
+            Priyanshu Malik — building interfaces and the systems underneath
+            them. Graphic design instincts, software engineering discipline.
+          </motion.p>
+
+          <motion.div variants={fadeUp} className="mt-4 flex gap-4">
+            <a
+              href="#projects"
+              data-cursor-hover
+              className="border-beam rounded-full px-6 py-3 font-mono text-xs uppercase tracking-widest text-amber"
+            >
+              View Work
+            </a>
+            <a
+              href="#contact"
+              data-cursor-hover
+              className="glass rounded-full px-6 py-3 font-mono text-xs uppercase tracking-widest text-paper"
+            >
+              Get In Touch
+            </a>
+          </motion.div>
+        </motion.div>
       </motion.div>
 
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1.1 }}
-        className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between"
+        animate={{ opacity: 1, transition: { delay: 1.4, duration: 1, ease: cinematicEase } }}
+        className="absolute bottom-10 flex flex-col items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-fog"
       >
-        <p className="max-w-md text-lg text-muted">
-          I build software, web and mobile products end to end — and design
-          the visual identity that ships with them.
-        </p>
-
-        <a
-          href="#work"
-          className="group flex items-center gap-3 font-display text-sm uppercase tracking-widest text-yellow"
-        >
-          Scroll to explore
-          <span className="flex h-9 w-9 items-center justify-center rounded-full border border-yellow/40 transition-transform group-hover:translate-y-1">
-            ↓
-          </span>
-        </a>
+        <span>Scroll</span>
+        <motion.span
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: cinematicEase }}
+          className="block h-8 w-px bg-gradient-to-b from-cyan to-transparent"
+        />
       </motion.div>
     </section>
   );

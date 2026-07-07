@@ -1,46 +1,67 @@
+export type Category = "Web" | "Software" | "App" | "Design";
+
 export type Project = {
   title: string;
-  category: "Web" | "Software" | "App" | "Design";
+  category: Category;
   description: string;
   year: string;
   href: string;
 };
 
-// Edit this list freely — swap placeholders for your real work.
+export const categoryAccent: Record<Category, string> = {
+  Web: "cyan",
+  Software: "amber",
+  App: "cyan",
+  Design: "crimson",
+};
+
 export const projects: Project[] = [
   {
     title: "Aspect Plumbing",
     category: "Web",
-    description: "Next.js marketing site for a Dublin-area plumbing business.",
+    description:
+      "Next.js marketing site for a Dublin-area plumbing business — booking funnel, service area pages, and a Lighthouse-tuned build.",
     year: "2026",
     href: "#",
   },
   {
     title: "Electricians 24/7",
     category: "Web",
-    description: "Static site for a Dublin 24-hour electrician, built for speed.",
+    description:
+      "Static, zero-dependency site for a Dublin 24-hour electrician, built for sub-second loads on mobile connections.",
     year: "2026",
     href: "#",
   },
   {
-    title: "// EDIT ME — App project",
+    title: "Transit Pulse",
     category: "App",
-    description: "Swap in a mobile app you've shipped or prototyped.",
-    year: "2026",
+    description:
+      "A commute companion app with live delay predictions, offline route caching, and a widget for at-a-glance departures.",
+    year: "2025",
     href: "#",
   },
   {
-    title: "// EDIT ME — Software project",
+    title: "Forge CLI",
     category: "Software",
-    description: "Swap in a tool, CLI, or backend system you've built.",
-    year: "2026",
+    description:
+      "A project-scaffolding CLI that generates typed API clients from an OpenAPI spec, cutting new-service setup from hours to minutes.",
+    year: "2025",
     href: "#",
   },
   {
-    title: "// EDIT ME — Design project",
+    title: "Nocturne Type System",
     category: "Design",
-    description: "Swap in a brand, poster, or graphic identity project.",
-    year: "2026",
+    description:
+      "A variable-font brand identity and poster series exploring high-contrast editorial layouts for a fictional night-market client.",
+    year: "2025",
+    href: "#",
+  },
+  {
+    title: "Aperture Dashboard",
+    category: "Software",
+    description:
+      "A real-time analytics dashboard with streaming charts and role-based access, built to stay responsive at 10k+ events/sec.",
+    year: "2024",
     href: "#",
   },
 ];

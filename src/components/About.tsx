@@ -1,70 +1,134 @@
-import Reveal from "./Reveal";
-import Marquee from "./Marquee";
+"use client";
 
-const SKILLS = [
-  "Next.js",
-  "React",
-  "TypeScript",
-  "Node.js",
-  "React Native",
-  "Figma",
-  "Adobe Illustrator",
-  "Tailwind CSS",
-  "Framer Motion",
-  "PostgreSQL",
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  PenTool,
+  Layers,
+  Palette,
+  Code2,
+  Terminal,
+  Cpu,
+} from "lucide-react";
+import { fadeUp, staggerContainer } from "@/lib/motion";
+
+const designSkills = [
+  { icon: Palette, label: "Brand & Identity" },
+  { icon: Layers, label: "Layout & Editorial" },
+  { icon: PenTool, label: "2D Illustration" },
 ];
 
-const STATS = [
-  { value: "4", label: "Disciplines\n(Web / Software / App / Design)" },
-  { value: "01", label: "Approach:\nDesign & build, one person" },
-  { value: "∞", label: "Iterations until\nit feels right" },
+const engineeringSkills = [
+  { icon: Code2, label: "Web Architecture" },
+  { icon: Terminal, label: "Systems & Tooling" },
+  { icon: Cpu, label: "App Engineering" },
 ];
 
 export default function About() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const orbY = useTransform(scrollYProgress, [0, 1], [-60, 60]);
+  const designX = useTransform(scrollYProgress, [0, 0.5], [-40, 0]);
+  const engineerX = useTransform(scrollYProgress, [0, 0.5], [40, 0]);
+
   return (
-    <section id="about" className="section-anchor relative py-28">
-      <div className="mx-auto max-w-6xl px-6">
-        <Reveal>
-          <span className="font-display text-sm uppercase tracking-[0.35em] text-red">
-            01 — About
-          </span>
-        </Reveal>
+    <section
+      id="about"
+      ref={sectionRef}
+      className="section-anchor relative overflow-hidden py-32"
+    >
+      <motion.div
+        style={{ y: orbY }}
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-1/3 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-cyan/10 blur-[140px] [transform:translateZ(0)]"
+      />
 
-        <Reveal delay={0.1}>
-          <h2 className="mt-6 max-w-4xl font-display text-4xl font-semibold uppercase leading-tight tracking-tight md:text-6xl">
-            Full-stack engineer with a{" "}
-            <span className="text-yellow">designer&apos;s eye</span> — I take
-            products from idea to interface to shipped code.
-          </h2>
-        </Reveal>
+      <div className="relative mx-auto max-w-6xl px-6">
+        <motion.div
+          variants={staggerContainer()}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.4 }}
+          className="mb-20 flex flex-col items-start gap-4"
+        >
+          <motion.span
+            variants={fadeUp}
+            className="font-mono text-xs uppercase tracking-[0.4em] text-amber"
+          >
+            01 / About
+          </motion.span>
+          <motion.h2
+            variants={fadeUp}
+            className="font-display text-5xl text-paper sm:text-7xl"
+          >
+            Two disciplines.
+            <br />
+            <span className="text-outline">One process.</span>
+          </motion.h2>
+        </motion.div>
 
-        <Reveal delay={0.2}>
-          <p className="mt-8 max-w-2xl text-lg text-muted">
-            I work across the whole stack: web apps, backend systems, mobile
-            builds, and the graphic identity that ties them together. That
-            means fewer handoffs, faster iteration, and products that look as
-            considered as they perform.
-          </p>
-        </Reveal>
+        <div className="grid gap-8 md:grid-cols-2">
+          <motion.div
+            style={{ x: designX }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1, transition: { duration: 1 } }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="glass border-beam rounded-3xl p-8 [transform:translateZ(0)]"
+          >
+            <h3 className="font-display text-3xl text-crimson text-glow-crimson">
+              Designer
+            </h3>
+            <p className="mt-4 font-sans text-sm leading-relaxed text-fog sm:text-base">
+              I start every build with the eye of a designer — grid, contrast,
+              rhythm, restraint. Visuals are engineered as carefully as code:
+              every spacing value and color decision earns its place.
+            </p>
+            <ul className="mt-6 flex flex-col gap-3">
+              {designSkills.map(({ icon: Icon, label }) => (
+                <li
+                  key={label}
+                  className="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-paper"
+                >
+                  <Icon size={16} className="text-crimson" />
+                  {label}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
 
-        <div className="mt-16 grid grid-cols-1 gap-10 sm:grid-cols-3">
-          {STATS.map((stat, i) => (
-            <Reveal key={stat.value} delay={0.1 * i}>
-              <div className="border-t border-white/10 pt-6">
-                <div className="font-display text-5xl font-bold text-red">
-                  {stat.value}
-                </div>
-                <p className="mt-3 whitespace-pre-line text-sm uppercase tracking-widest text-muted">
-                  {stat.label}
-                </p>
-              </div>
-            </Reveal>
-          ))}
+          <motion.div
+            style={{ x: engineerX }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1, transition: { duration: 1 } }}
+            viewport={{ once: true, amount: 0.3 }}
+            className="glass border-beam rounded-3xl p-8 [transform:translateZ(0)]"
+          >
+            <h3 className="font-display text-3xl text-cyan text-glow-cyan">
+              Engineer
+            </h3>
+            <p className="mt-4 font-sans text-sm leading-relaxed text-fog sm:text-base">
+              Then I build the machine underneath — clean architecture,
+              typed and tested, tuned for performance. The interface never
+              outpaces the system that has to run it.
+            </p>
+            <ul className="mt-6 flex flex-col gap-3">
+              {engineeringSkills.map(({ icon: Icon, label }) => (
+                <li
+                  key={label}
+                  className="flex items-center gap-3 font-mono text-xs uppercase tracking-widest text-paper"
+                >
+                  <Icon size={16} className="text-cyan" />
+                  {label}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
         </div>
-      </div>
-
-      <div className="mt-20">
-        <Marquee items={SKILLS} />
       </div>
     </section>
   );

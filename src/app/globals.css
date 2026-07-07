@@ -1,65 +1,183 @@
 @import "tailwindcss";
 
 :root {
-  --navy-deep: #050c1f;
-  --navy: #0a1a3f;
-  --ink: #030509;
-  --red: #e4002b;
-  --red-dim: #8c0019;
-  --yellow: #ffc906;
-  --paper: #f4f5f7;
-  --muted: #8894b8;
+  --obsidian: #060608;
+  --concrete: #101114;
+  --concrete-light: #1a1b1f;
+  --concrete-line: #2a2c31;
+  --cyan: #00f3ff;
+  --crimson: #ff0055;
+  --amber: #ffaa00;
+  --fog: #9aa1ab;
+  --paper: #e9eaec;
 }
 
 @theme inline {
-  --color-navy-deep: var(--navy-deep);
-  --color-navy: var(--navy);
-  --color-ink: var(--ink);
-  --color-red: var(--red);
-  --color-red-dim: var(--red-dim);
-  --color-yellow: var(--yellow);
+  --color-obsidian: var(--obsidian);
+  --color-concrete: var(--concrete);
+  --color-concrete-light: var(--concrete-light);
+  --color-concrete-line: var(--concrete-line);
+  --color-cyan: var(--cyan);
+  --color-crimson: var(--crimson);
+  --color-amber: var(--amber);
+  --color-fog: var(--fog);
   --color-paper: var(--paper);
-  --color-muted: var(--muted);
-  --font-display: var(--font-oswald);
-  --font-sans: var(--font-inter);
+  --font-display: var(--font-bebas);
+  --font-sans: var(--font-grotesk);
+  --font-mono: var(--font-jetbrains);
 }
 
 html {
   scroll-behavior: smooth;
-  background: var(--ink);
+  background: var(--obsidian);
 }
 
 body {
-  background: var(--ink);
+  background: var(--obsidian);
   color: var(--paper);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-grotesk), sans-serif;
+  overflow-x: hidden;
+}
+
+@media (pointer: fine) {
+  body.custom-cursor-active,
+  body.custom-cursor-active * {
+    cursor: none !important;
+  }
 }
 
 ::selection {
-  background: var(--red);
-  color: var(--paper);
+  background: var(--cyan);
+  color: var(--obsidian);
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--ink);
+  background: var(--obsidian);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--navy);
-  border: 2px solid var(--ink);
+  background: var(--concrete-line);
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--red-dim);
-}
-
-.text-outline {
-  -webkit-text-stroke: 1.5px var(--muted);
-  color: transparent;
+  background: var(--cyan);
 }
 
 .section-anchor {
   scroll-margin-top: 96px;
+}
+
+/* ---------- Atmosphere: noise + grid ---------- */
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 0%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 20%, black 0%, transparent 75%);
+}
+
+/* ---------- Glass + glow utilities ---------- */
+
+.glass {
+  @apply backdrop-blur-xl;
+  background: rgba(16, 17, 20, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glow-cyan {
+  filter: drop-shadow(0 0 12px rgba(0, 243, 255, 0.55));
+}
+.glow-crimson {
+  filter: drop-shadow(0 0 12px rgba(255, 0, 85, 0.55));
+}
+.glow-amber {
+  filter: drop-shadow(0 0 12px rgba(255, 170, 0, 0.55));
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 18px rgba(0, 243, 255, 0.6), 0 0 40px rgba(0, 243, 255, 0.25);
+}
+.text-glow-crimson {
+  text-shadow: 0 0 18px rgba(255, 0, 85, 0.6), 0 0 40px rgba(255, 0, 85, 0.25);
+}
+
+.text-outline {
+  -webkit-text-stroke: 1.5px rgba(233, 234, 236, 0.4);
+  color: transparent;
+}
+
+/* ---------- Animated border beam ---------- */
+
+@property --beam-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.border-beam {
+  position: relative;
+  isolation: isolate;
+}
+
+.border-beam::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0%,
+    var(--cyan) 8%,
+    transparent 18%,
+    transparent 82%,
+    var(--crimson) 92%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: beam-rotate 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes beam-rotate {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+/* ---------- Marquee ---------- */
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 28s linear infinite;
 }
