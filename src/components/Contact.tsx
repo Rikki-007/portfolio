@@ -9,7 +9,11 @@ import {
   FacebookIcon,
   WhatsappIcon,
 } from "@/components/icons/BrandIcons";
+import { Wordmark } from "@/components/icons/MonolythMark";
 import { fadeUp, staggerContainer } from "@/lib/motion";
+
+const email = "malikpriyanshu250208@gmail.com";
+const gmailComposeHref = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}`;
 
 const socials = [
   { icon: GithubIcon, label: "GitHub", href: "https://github.com/Rikki-007" },
@@ -42,6 +46,10 @@ export default function Contact() {
           viewport={{ once: true, amount: 0.5 }}
           className="flex flex-col items-center gap-6"
         >
+          <motion.div variants={fadeUp}>
+            <Wordmark iconSize={34} textClassName="text-xl sm:text-2xl" />
+          </motion.div>
+
           <motion.span
             variants={fadeUp}
             className="font-mono text-xs uppercase tracking-[0.4em] text-amber"
@@ -69,11 +77,14 @@ export default function Contact() {
           <motion.a
             variants={fadeUp}
             data-cursor-hover
-            href="mailto:malikpriyanshu250208@gmail.com"
-            className="border-beam glow-cyan mt-4 flex items-center gap-3 rounded-full px-8 py-4 font-mono text-sm uppercase tracking-widest text-cyan"
+            href={gmailComposeHref}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Email ${email} via Gmail`}
+            className="border-beam glow-cyan mt-4 flex items-center gap-3 rounded-full px-8 py-4 font-mono text-sm tracking-widest text-cyan"
           >
             <Mail size={18} />
-            malikpriyanshu250208@gmail.com
+            {email}
           </motion.a>
 
           <motion.a
