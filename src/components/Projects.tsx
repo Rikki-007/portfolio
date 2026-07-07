@@ -86,7 +86,7 @@ export default function Projects() {
           <AnimatePresence mode="popLayout">
             {filtered.map((project, i) => (
               <ProjectCard
-                key={project.title}
+                key={project.comingSoon ? `soon-${project.category}` : project.title}
                 project={project}
                 tall={i % 5 === 0}
               />

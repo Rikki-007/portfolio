@@ -1,12 +1,21 @@
 export type Category = "Web" | "Software" | "App" | "Design";
 
 export type Project = {
+  comingSoon?: false;
   title: string;
   category: Category;
   description: string;
   year: string;
-  href: string;
+  liveUrl: string;
+  githubUrl: string;
 };
+
+export type ComingSoonEntry = {
+  comingSoon: true;
+  category: Category;
+};
+
+export type ProjectEntry = Project | ComingSoonEntry;
 
 export const categoryAccent: Record<Category, string> = {
   Web: "cyan",
@@ -15,53 +24,47 @@ export const categoryAccent: Record<Category, string> = {
   Design: "crimson",
 };
 
-export const projects: Project[] = [
+// Every entry below maps 1:1 to a real, currently-live GitHub repo under
+// github.com/Rikki-007 — verified via `gh repo list` + Pages deployment status.
+// Categories with no shipped repo yet get a comingSoon placeholder instead
+// of invented project data.
+export const projects: ProjectEntry[] = [
   {
-    title: "Aspect Plumbing",
+    title: "Aspect Plumbing & Heating",
     category: "Web",
     description:
-      "Next.js marketing site for a Dublin-area plumbing business — booking funnel, service area pages, and a Lighthouse-tuned build.",
+      "Next.js marketing site for a Dublin-area plumbing & heating business.",
     year: "2026",
-    href: "#",
+    liveUrl: "https://rikki-007.github.io/aspect-plumbing-heating/",
+    githubUrl: "https://github.com/Rikki-007/aspect-plumbing-heating",
   },
   {
     title: "Electricians 24/7",
     category: "Web",
     description:
-      "Static, zero-dependency site for a Dublin 24-hour electrician, built for sub-second loads on mobile connections.",
+      "Static, zero-dependency site for a Dublin 24-hour electrician, built for fast loads on mobile connections.",
     year: "2026",
-    href: "#",
+    liveUrl: "https://rikki-007.github.io/electricians-24-7/",
+    githubUrl: "https://github.com/Rikki-007/electricians-24-7",
   },
   {
-    title: "Transit Pulse",
-    category: "App",
+    title: "F1 Records 007",
+    category: "Web",
     description:
-      "A commute companion app with live delay predictions, offline route caching, and a widget for at-a-glance departures.",
-    year: "2025",
-    href: "#",
+      "Tracks every F1 driver's points and season performance from the first 1950 season through the latest race.",
+    year: "2026",
+    liveUrl: "https://rikki-007.github.io/F1-Records-007/",
+    githubUrl: "https://github.com/Rikki-007/F1-Records-007",
   },
   {
-    title: "Forge CLI",
-    category: "Software",
-    description:
-      "A project-scaffolding CLI that generates typed API clients from an OpenAPI spec, cutting new-service setup from hours to minutes.",
-    year: "2025",
-    href: "#",
+    title: "Formula1 Records",
+    category: "Web",
+    description: "An archive of Formula 1 records, kept up to date with the latest results.",
+    year: "2026",
+    liveUrl: "https://rikki-007.github.io/Formula1-Records/",
+    githubUrl: "https://github.com/Rikki-007/Formula1-Records",
   },
-  {
-    title: "Nocturne Type System",
-    category: "Design",
-    description:
-      "A variable-font brand identity and poster series exploring high-contrast editorial layouts for a fictional night-market client.",
-    year: "2025",
-    href: "#",
-  },
-  {
-    title: "Aperture Dashboard",
-    category: "Software",
-    description:
-      "A real-time analytics dashboard with streaming charts and role-based access, built to stay responsive at 10k+ events/sec.",
-    year: "2024",
-    href: "#",
-  },
+  { comingSoon: true, category: "App" },
+  { comingSoon: true, category: "Software" },
+  { comingSoon: true, category: "Design" },
 ];
